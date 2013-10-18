@@ -36,20 +36,26 @@
                         popupAnchor: [0, -28]
                 });
 
+		function onEachFeature(feature, layer) {
+			var popupContent = "<p>I started out as a GeoJSON " +
+					feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+
+			layer.bindPopup(popupContent);
+		}
+
+
+
                 L.geoJson([sources], {
 
                         style: function (feature) {
                                 return feature.properties && feature.properties.style;
                         },
 
-                        onEachFeature: function (layer,feature) {
-                                var str = "";
-                                $.each(feature.properties, function(key, val){
-                                        str += '<tr><td>'+key+'</td><td id="'+key+'">'+val+'</td><tr>';
-                                  });
-                                  layer.bindPopup(str);
-                        },
-
+                        onEachFeature: onEachFeature,
 
                         pointToLayer: function (feature, latlng) {
                                 return L.circleMarker(latlng, {
