@@ -40,7 +40,7 @@
 			var popupContent = "";
 
 			if (feature.properties) {
-				popupContent += "<tr><td>First Duty</td><td>"+feature.properties.RW_FIRSTDU+"</td></tr><tr><td>Type</td><td>"+feature.properties.RW_TYPE+"</td></tr>";
+				popupContent += "<table><tr><td>First Duty: </td><td>"+feature.properties.RW_FIRSTDU+"</td></tr><tr><td>Type: </td><td>"+feature.properties.RW_TYPE+"</td></tr></table>";
 			}
 
 			layer.bindPopup(popupContent);
