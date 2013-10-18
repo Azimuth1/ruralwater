@@ -38,8 +38,8 @@
                 function onEachFeature(feature, layer) {
                         var popupContent = "<p>Source features</p>";
 
-                        if (feature.properties && feature.properties.popupContent) {
-                                popupContent += feature.properties.popupContent;
+                        if (feature.properties) {
+                                popupContent += feature.properties;
                         }
 
                         layer.bindPopup(popupContent);
