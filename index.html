@@ -41,9 +41,9 @@
                                 return feature.properties && feature.properties.style;
                         },
 
-                        onEachRecord: function (layer,feature) {
+                        onEachFeature: function (layer,feature) {
                                 var str = "";
-                                $.each(feature, function(key, val){
+                                $.each(feature.properties, function(key, val){
                                         str += '<tr><td>'+key+'</td><td id="'+key+'">'+val+'</td><tr>';
                                   });
                                   layer.bindPopup(str);
