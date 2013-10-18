@@ -41,8 +41,8 @@
                                 return feature.properties && feature.properties.style;
                         },
 
-                        onEachRecord: function (layer,record) {
-                                var $html = L.HTMLUtils.buildTable(record.properties);
+                        onEachFeature: function (layer,feature) {
+                                var $html = L.HTMLUtils.buildTable(feature.properties);
                                 layer.bindPopup($html.wrap('<div/>').parent().html(),{
                                         minWidth: 400,
                                         maxWidth: 400
