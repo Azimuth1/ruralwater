@@ -14,11 +14,11 @@
 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
 </head>
 <body>
-        <div id="map" style="width: 800px; height: 600px"></div>
+        <div id="map" style="width: 1200px; height: 850px"></div>
 
         <script src="sources.geojson"></script>
         <script>
-                var map = L.map('map').setView([ 39.12, -77.65], 12);
+                var map = L.map('map').setView([ 39.12, -77.65], 11);
                 
                 var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
                 //var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
