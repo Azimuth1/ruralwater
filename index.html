@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>Leaflet Layers Control Example</title>
+        <title>Loudoun County Rural Water Supply</title>
         <meta charset="utf-8" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +18,15 @@
 
         <script src="ruralwater.geojson"></script>
         <script>
-                var map = L.map('map').setView([-77.65, 39.12], 16);
+                var map = L.map('map').setView([ 39.12, -77.65], 16);
+                
+                var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
+                //var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
+                        attribution: 'Azimuth1',
+                        maxZoom: 22
+                });
 
-                L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
-                        attribution: '',
-                        key: 'BC9A493B41014CAABB98F0471D759707'
-                }).addTo(map);
+                baseLayer.addTo(map);
 
                 var baseballIcon = L.icon({
                         iconUrl: 'baseball-marker.png',
