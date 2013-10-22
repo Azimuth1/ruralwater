@@ -123,7 +123,9 @@
 	})
 	fire.addTo(map);
 	
-        var water = new cilogi.L.Marker(L.latLng([39.1468,-77.6071]),{
+	var closest = index.nearest(point: L.LatLng or [lon, lat], n, max_distance)
+	
+        var water = new cilogi.L.Marker(closest,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043",
