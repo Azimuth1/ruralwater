@@ -124,7 +124,7 @@
 	})
 	fire.addTo(map);
 	
-	var closest = index.nearest(firePt, 1);
+	var closest = index.nearest(firePt, 2);
 	var waterPt = closest[0];
         var water = new cilogi.L.Marker(waterPt,{
 		fontIconSize: computeSizeFromZoom(),
