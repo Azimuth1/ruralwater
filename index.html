@@ -12,6 +12,8 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
 <script src="cilogi-marker.min.js"></script>
+<script src="leaflet-knn.min.js"></script>
+
 
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
@@ -38,7 +40,7 @@
 		attribution: 'Azimuth1',
 		maxZoom: 22
 	});
-	
+	var watersources;
 	baseLayer.addTo(map);
 	var baseballIcon = L.icon({
 		iconUrl: 'baseball-marker.png',
@@ -61,7 +63,7 @@
 		layer.bindPopup(popupContent);
 	}
 
-	L.geoJson([sources], {
+	watersources = L.geoJson([sources], {
 		style: function (feature) {
 			return feature.properties && feature.properties.style;
 		},
@@ -76,7 +78,8 @@
 				fillOpacity: 0.8
 			});
 		}
-	}).addTo(map);
+	});
+	watersources.addTo(map);
 
 	function getRoute(response) {
 		var point, route, points = [];
@@ -107,6 +110,8 @@
 		table = [4, 2, 1];
 		return  (diff < table.length) ? table[diff] : 1;
 	}
+
+	var index = leafletKnn(watersources);
 
         new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
 		draggable: true, 
