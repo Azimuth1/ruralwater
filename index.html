@@ -113,7 +113,7 @@
 
 	var index = leafletKnn(watersources);
 
-	var firePt = new L.LatLng([39.05,-77.75]);
+	var firePt = new L.latLng([39.05,-77.75]);
         var fire = new cilogi.L.Marker(firePt,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
@@ -124,9 +124,9 @@
 	})
 	fire.addTo(map);
 	
-	var closest = index.nearest(firePt, 1, 100000);
+	var closest = index.nearest(firePt, 1);
 	
-        var water = new cilogi.L.Marker(closest,{
+        var water = new cilogi.L.Marker(closest[0],{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043", //water drop
