@@ -23,84 +23,78 @@
 <link rel="stylesheet" type="text/css" href="cilogi-marker.css">
 </head> 
 <body>
-        <div id="map" style="width: 100%; height: 100%"></div>
+<div id="map" style="width: 100%; height: 100%"></div>
 
-        <script src="sources.geojson"></script>
-        <script>
-                var map = L.map('map').setView([ 39.12, -77.65], 11);
-                var markers = [];
-                var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
-                //var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
-                        //key: 'BC9A493B41014CAABB98F0471D759707',
-                        attribution: 'Azimuth1',
-                        maxZoom: 22
-                });
+<script src="sources.geojson"></script>
+<script>
+	var map = L.map('map').setView([ 39.12, -77.65], 11);
+	var markers = [];
+	var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
+		//var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
+		//key: 'BC9A493B41014CAABB98F0471D759707',
+		attribution: 'Azimuth1',
+		maxZoom: 22
+	});
+	
+	baseLayer.addTo(map);
+	var baseballIcon = L.icon({
+		iconUrl: 'baseball-marker.png',
+		iconSize: [32, 37],
+		iconAnchor: [16, 37],
+		popupAnchor: [0, -28]
+	});
 
-                baseLayer.addTo(map);
+	function onEachFeature(feature, layer) {
+		var popupContent = "";
 
-                var baseballIcon = L.icon({
-                        iconUrl: 'baseball-marker.png',
-                        iconSize: [32, 37],
-                        iconAnchor: [16, 37],
-                        popupAnchor: [0, -28]
-                });
-
-		function onEachFeature(feature, layer) {
-			var popupContent = "";
-
-			if (feature.properties) {
-				popupContent += "<table>";
-				popupContent += "<tr><td>First Duty: </td><td>"+feature.properties.RW_FIRSTDU+"</td></tr>";
-				popupContent += "<tr><td>Type: </td><td>"+feature.properties.RW_TYPE+"</td></tr>";
-				popupContent += "<tr><td>Size: </td><td>"+feature.properties.RW_SIZE+"</td></tr>";
-				popupContent += "</table>";
-			}
-
-			layer.bindPopup(popupContent);
+		if (feature.properties) {
+			popupContent += "<table>";
+			popupContent += "<tr><td>First Duty: </td><td>"+feature.properties.RW_FIRSTDU+"</td></tr>";
+			popupContent += "<tr><td>Type: </td><td>"+feature.properties.RW_TYPE+"</td></tr>";
+			popupContent += "<tr><td>Size: </td><td>"+feature.properties.RW_SIZE+"</td></tr>";
+			popupContent += "</table>";
 		}
 
+		layer.bindPopup(popupContent);
+	}
 
+	L.geoJson([sources], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+		onEachFeature: onEachFeature,
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map);
 
-                L.geoJson([sources], {
+	function getRoute(response) {
+		var point, route, points = [];
+		for (var i=0; i<response.route_geometry.length; i++) {
+			point = new L.LatLng(response.route_geometry[i][0] , response.route_geometry[i][1]);
+			points.push(point);
+		}
+		route= new L.Polyline(points, {
+			weight: 3,
+			opacity: 0.5,
+			smoothFactor: 1
+		}).addTo(map);
+		route.bringToFront();
+	}
 
-                        style: function (feature) {
-                                return feature.properties && feature.properties.style;
-                        },
-
-                        onEachFeature: onEachFeature,
-
-                        pointToLayer: function (feature, latlng) {
-                                return L.circleMarker(latlng, {
-                                        radius: 8,
-                                        fillColor: "#ff7800",
-                                        color: "#000",
-                                        weight: 1,
-                                        opacity: 1,
-                                        fillOpacity: 0.8
-                                });
-                        }
-                }).addTo(map);
-                
-                function getRoute(response) {
-                        var point, route, points = [];
-                        for (var i=0; i<response.route_geometry.length; i++) {
-                                    point = new L.LatLng(response.route_geometry[i][0] , response.route_geometry[i][1]);
-                                    points.push(point);
-                        }
-                        route= new L.Polyline(points, {
-                                    weight: 3,
-                                    opacity: 0.5,
-                                    smoothFactor: 1
-                        }).addTo(map);
-                        route.bringToFront();
-                    }
-                    
-                function addScript(url) {
-                        var script = document.createElement('script');
-                        script.type="text/javascript";
-                        script.src=url;
-                        document.getElementsByTagName('head') [0].appendChild(script);
-                }
+	function addScript(url) {
+		var script = document.createElement('script');
+		script.type="text/javascript";
+		script.src=url;
+		document.getElementsByTagName('head') [0].appendChild(script);
+	}
 
         function computeSizeFromZoom() {
             var max = map.getMaxZoom(),
@@ -110,29 +104,29 @@
             return  (diff < table.length) ? table[diff] : 0.5;
         }
 
-        function addMarker(latLng, opts) {
-            var icon = opts.icon || "\ue002",
-                color = opts.color || "blue",
-                font = opts.iconFont || "iconic",
-                sz = computeSizeFromZoom();
+	function addMarker(latLng, opts) {
+		var icon = opts.icon || "\ue002",
+		color = opts.color || "blue",
+		font = opts.iconFont || "iconic",
+		sz = computeSizeFromZoom();
 
-                marker = new cilogi.L.Marker(latLng, {
-                    fontIconSize: sz,
-                    fontIconName: icon,
-                    fontIconColor: color,
-                    fontIconFont: font,
-                    opacity: 1
-                });
-            drawnItems.addLayer(marker);
-            markers.push(marker);
-        }
-
+		marker = new cilogi.L.Marker(latLng, {
+			fontIconSize: sz,
+			fontIconName: icon,
+			fontIconColor: color,
+			fontIconFont: font,
+			opacity: 1
+		});
+		drawnItems.addLayer(marker);
+		markers.push(marker);
+	}
+        
 	addMarker(L.latLng([39.05,-77.75]),{draggable: true},{icon: "\uf030", color: "#990000", iconFont: 'awesome'});
-                fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true}).addTo(map);
-                toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
-                addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
+	//fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true}).addTo(map);
+	//toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
+	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
 
-        </script>
+</script>
 </body>
 </html>
 
