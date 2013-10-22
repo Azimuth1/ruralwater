@@ -97,32 +97,10 @@
 		document.getElementsByTagName('head') [0].appendChild(script);
 	}
 
-        function computeSizeFromZoom() {
-            var max = map.getMaxZoom(),
-                zoom = map.getZoom(),
-                diff = max - zoom,
-                table = [2, 1, 0.5];
-            return  (diff < table.length) ? table[diff] : 0.5;
-        }
+ 
 
-	function addMarker(latLng, opts) {
-		var icon = opts.icon || "\ue002",
-		color = opts.color || "blue",
-		font = opts.iconFont || "iconic",
-		sz = computeSizeFromZoom();
 
-		marker = new cilogi.L.Marker(latLng, {
-			fontIconSize: sz,
-			fontIconName: icon,
-			fontIconColor: color,
-			fontIconFont: font,
-			opacity: 1
-		});
-		drawnItems.addLayer(marker);
-		markers.push(marker);
-	}
-        
-	addMarker(L.latLng([39.05,-77.75]),{draggable: true},{icon: "\uf030", color: "#990000", iconFont: 'awesome'});
+        new cilogi.L.Marker(L.latLng([39.05,-77.75]),{draggable: true, icon: "\uf030", color: "#990000", iconFont: 'awesome'});
 	//fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true}).addTo(map);
 	//toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
 	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
