@@ -104,14 +104,14 @@
 		var max = map.getMaxZoom(),
 		zoom = map.getZoom(),
 		diff = max - zoom,
-		table = [2, 1, 0.5];
+		table = [4, 2, 1];
 		return  (diff < table.length) ? table[diff] : 0.5;
 	}
 
         new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
-		fontIconName: "\uf030",
+		fontIconName: "\uf06D",
 		fontIconColor: "#990000",
 		fontIconFont: 'awesome',
 		opacity: 1
