@@ -11,14 +11,18 @@
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
 <![endif]-->
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
 <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<style>
+	 html, body {height: 100%;}
+</style>
 </head>
 <body>
-        <div id="map" style="width: 800px; height: 600px"></div>
+        <div id="map" style="width: 100%; height: 100%"></div>
 
         <script src="sources.geojson"></script>
         <script>
-                var map = L.map('map').setView([ 39.12, -77.65], 16);
+                var map = L.map('map').setView([ 39.12, -77.65], 11);
                 
                 //var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
                 var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
@@ -35,15 +39,21 @@
                         popupAnchor: [0, -28]
                 });
 
-                function onEachFeature(feature, layer) {
-                        var popupContent = "<p></p>";
+		function onEachFeature(feature, layer) {
+			var popupContent = "";
 
-                        if (feature.properties && feature.properties.popupContent) {
-                                popupContent += feature.properties.popupContent;
-                        }
+			if (feature.properties) {
+				popupContent += "<table>";
+				popupContent += "<tr><td>First Duty: </td><td>"+feature.properties.RW_FIRSTDU+"</td></tr>";
+				popupContent += "<tr><td>Type: </td><td>"+feature.properties.RW_TYPE+"</td></tr>";
+				popupContent += "<tr><td>Size: </td><td>"+feature.properties.RW_SIZE+"</td></tr>";
+				popupContent += "</table>";
+			}
 
-                        layer.bindPopup(popupContent);
-                }
+			layer.bindPopup(popupContent);
+		}
+
+
 
                 L.geoJson([sources], {
 
