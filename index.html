@@ -127,7 +127,6 @@
 	var closest = index.nearest(firePt, 1);
 	
         var water = new cilogi.L.Marker(closest[0],{
-		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043", //water drop
 		fontIconColor: "#000099",
@@ -136,9 +135,7 @@
 	})
 	water.addTo(map);
 
-	fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true});
-	toMarker=new L.Marker(new L.latLng([39.1468,-77.6071])).addTo(map);
-	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
+	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + closest.lat + ',' + closest.lng + '/car.js?callback=getRoute');
 
 </script>
 </body>
