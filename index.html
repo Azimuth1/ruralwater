@@ -105,7 +105,7 @@
 		zoom = map.getZoom(),
 		diff = max - zoom,
 		table = [4, 2, 1];
-		return  (diff < table.length) ? table[diff] : 0.5;
+		return  (diff < table.length) ? table[diff] : 1;
 	}
 
         new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
