@@ -100,10 +100,17 @@
  
 
 
-        new cilogi.L.Marker(L.latLng([39.05,-77.75]),{draggable: true, icon: "\uf030", color: "#990000", iconFont: 'awesome'});
-	//fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true}).addTo(map);
-	//toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
-	//addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
+        new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
+		draggable: true, 
+		fontIconSize: 5,
+		fontIconName: "\uf030",
+		fontIconColor: "#990000",
+		fontIconFont: 'awesome',
+		opacity: 1
+	});
+	fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true});
+	toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
+	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
 
 </script>
 </body>
