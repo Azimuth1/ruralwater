@@ -113,16 +113,28 @@
 
 	var index = leafletKnn(watersources);
 
-        new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
+        var fire = new cilogi.L.Marker(L.latLng([39.05,-77.75]),{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf06D",
 		fontIconColor: "#990000",
 		fontIconFont: 'awesome',
 		opacity: 1
-	}).addTo(map);
+	})
+	fire.addTo(map);
+	
+        var water = new cilogi.L.Marker(L.latLng([39.1468,-77.6071]),{
+		draggable: true, 
+		fontIconSize: computeSizeFromZoom(),
+		fontIconName: "\uf043",
+		fontIconColor: "#000099",
+		fontIconFont: 'awesome',
+		opacity: 1
+	})
+	water.addTo(map);
+
 	fromMarker = new L.Marker(new L.latLng([39.05,-77.75]),{draggable: true});
-	toMarker=new L.Marker(new L.latLng([39.1468,-77.6071]),{draggable: true}).addTo(map);
+	toMarker=new L.Marker(new L.latLng([39.1468,-77.6071])).addTo(map);
 	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
 
 </script>
