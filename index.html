@@ -98,8 +98,8 @@
                 }
 
 
-                fromMarker = new L.Marker(new L.latLng([12.999070,77.568679])).addTo(map);
-                toMarker=new L.Marker(new L.latLng([13.006610,77.578130])).addTo(map);
+                fromMarker = new L.Marker(new L.latLng([-77.75,39.05])).addTo(map);
+                toMarker=new L.Marker(new L.latLng([-77.6071,39.1468])).addTo(map);
                 addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
 
         </script>
