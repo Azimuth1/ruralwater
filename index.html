@@ -65,6 +65,32 @@
                         }
                 }).addTo(map);
 
+		function getRoute(response) {
+                	var point, route, points = [];
+                	for (var i=0; i<response.route_geometry.length; i++) {
+                    		point = new L.LatLng(response.route_geometry[i][0] , response.route_geometry[i][1]);
+                    		points.push(point);
+                	}
+                	route= new L.Polyline(points, {
+                    		weight: 3,
+                    		opacity: 0.5,
+                    		smoothFactor: 1
+                	}).addTo(map);
+                	route.bringToFront();
+            	}
+            	
+		function addScript(url) {
+			var script = document.createElement('script');
+			script.type="text/javascript";
+			script.src=url;
+			document.getElementsByTagName('head') [0].appendChild(script);
+		}
+
+
+		fromMarker = new L.Marker(new L.latLng([12.999070,77.568679])).addTo(map);
+		toMarker=new L.Marker(new L.latLng([13.006610,77.578130])).addTo(map);
+		addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + fromMarker.getLatLng().lat + ',' + fromMarker.getLatLng().lng + ',' + toMarker.getLatLng().lat + ',' + toMarker.getLatLng().lng + '/car.js?callback=getRoute');
+
         </script>
 </body>
 </html>
