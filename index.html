@@ -102,7 +102,7 @@
 		var max = map.getMaxZoom(),
 		zoom = map.getZoom(),
 		diff = max - zoom,
-		table = [2, 1, 0.5];.
+		table = [2, 1, 0.5];
 		return  (diff < table.length) ? table[diff] : 0.5;
 	}
 
