@@ -113,11 +113,11 @@
 
 	var index = leafletKnn(watersources);
 
-	var firePt = new L.latLng([39.05,-77.75]);
+	var firePt = new L.LatLng([39.05,-77.75]);
         var fire = new cilogi.L.Marker(firePt,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
-		fontIconName: "\uf06D",
+		fontIconName: "\uf06D", // fire
 		fontIconColor: "#990000",
 		fontIconFont: 'awesome',
 		opacity: 1
@@ -129,7 +129,7 @@
         var water = new cilogi.L.Marker(closest,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
-		fontIconName: "\uf043",
+		fontIconName: "\uf043", //water drop
 		fontIconColor: "#000099",
 		fontIconFont: 'awesome',
 		opacity: 1
