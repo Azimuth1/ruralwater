@@ -187,8 +187,8 @@ fire.on('dragend', function(event) {
 	var marker = event.target;  // you could also simply access the marker through the closure
 	var result = fire.getLatLng();  // but using the passed event is cleaner
 	console.log(result);
-	water = NULL;
-	script = NULL;
+	map.removeLayer(water);
+	map.removeLayer(script);
 	getNearestWater(fire);
 });
 
