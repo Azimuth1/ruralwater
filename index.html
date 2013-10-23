@@ -73,7 +73,7 @@ function resize(){
     }
 
 }
-var fire, water
+var fire, water, route
 
 	var map = L.map('map').setView([ 39.12, -77.695], 11);
 	var markers = [];
@@ -138,8 +138,8 @@ var fire, water
 		route.bringToFront();
 	}
 
-	function addScript(url) {
-		var script = document.createElement('script');
+	function addRoute(url) {
+		route = document.createElement('script');
 		script.type="text/javascript";
 		script.src=url;
 		document.getElementsByTagName('head') [0].appendChild(script);
@@ -180,14 +180,14 @@ function getNearestWater(fire){
 	})
 	water.addTo(map);
 
-	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
+	addRoute('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 
 }
 
 fire.on('dragend', function(event) {
 	console.log(fire.getLatLng());
 	map.removeLayer(water);
-	map.removeLayer(script);
+	map.removeLayer(route);
 	getNearestWater(fire);
 });
 
