@@ -179,10 +179,10 @@ function resize(){
 
 	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 
-marker.on('dragend', function(event) {
-    //var marker = event.target;  // you could also simply access the marker through the closure
-    //var result = marker.getLatLng();  // but using the passed event is cleaner
-    //console.log(result);
+fire.on('dragend', function(event) {
+    var marker = event.target;  // you could also simply access the marker through the closure
+    var result = fire.getLatLng();  // but using the passed event is cleaner
+    console.log(result);
     addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 });
 </script>
