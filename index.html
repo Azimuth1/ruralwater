@@ -73,6 +73,7 @@ function resize(){
     }
 
 }
+var fire, water
 
 	var map = L.map('map').setView([ 39.12, -77.695], 11);
 	var markers = [];
@@ -156,7 +157,7 @@ function resize(){
 	var index = leafletKnn(watersources);
 
 	var firePt = new L.latLng([39.195, -77.6]);
-        var fire = new cilogi.L.Marker(firePt,{
+        fire = new cilogi.L.Marker(firePt,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf06D", // fire
@@ -170,7 +171,7 @@ function getNearestWater(fire){
 	firePt = L.latLng(fire.getLatLng());
 	var closest = index.nearest(firePt, 1);
 	var waterPt = closest[0];
-        var water = new cilogi.L.Marker(waterPt,{
+        water = new cilogi.L.Marker(waterPt,{
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043", //water drop
 		fontIconColor: "#000099",
