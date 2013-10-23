@@ -180,7 +180,7 @@ function getNearestWater(fire){
 	})
 	water.addTo(map);
 
-	addRoute('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
+	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 
 }
 
