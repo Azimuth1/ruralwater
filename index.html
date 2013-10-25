@@ -105,18 +105,6 @@ document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
-
-
-    /*
-    if($(window).width()>=980){
-        $('#map').css("height", ($(window).height() - mapmargin));    
-        $('#map').css("margin-top",50);
-    }else{
-        $('#map').css("height", ($(window).height() - (mapmargin+12)));    
-        $('#map').css("margin-top",-21);
-    }
-    */
-
 }
 var fire, water, route
 
@@ -229,12 +217,22 @@ function getNearestWater(fire){
 
 }
 
+function moveFire(addr){
+	newLatLong = "";
+	fire.setLatLng(newLatLng); 
+	map.removeLayer(water);
+	map.removeLayer(route);
+	getNearestWater(fire);
+
+}
+
 fire.on('dragend', function(event) {
 	console.log(fire.getLatLng());
 	map.removeLayer(water);
 	map.removeLayer(route);
 	getNearestWater(fire);
 });
+
 
 getNearestWater(fire);
 
