@@ -42,9 +42,9 @@
 
   <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse navbar-ex1-collapse">
-	<form class="navbar-form navbar-left" role="search">
+	<form id="AddressForm" class="navbar-form navbar-left" role="search">
 		<div class="form-group">
-			<input type="text" class="form-control input-sm" placeholder="Address:  123 Any Street">
+			<input type="text" id="addressInput" class="form-control input-sm" placeholder="Address:  123 Any Street">
 		</div>
 		<button type="submit" class="btn btn-default btn-sm">Submit</button>
 	</form>
@@ -95,6 +95,12 @@ var mapmargin = 50;
 $('#map').css("height", ($(window).height() - mapmargin));
 $(window).on("resize", resize);
 resize();
+
+document.getElementById('AddressForm').addEventListener('submit', function(ev) {
+    ev.preventDefault();
+    alert('Address submitted'+input.addressinput.value);
+});
+
 function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
