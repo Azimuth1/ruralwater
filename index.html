@@ -98,7 +98,7 @@ resize();
 
 document.getElementById('AddressForm').addEventListener('submit', function(ev) {
     ev.preventDefault();
-    alert('Address submitted'+input.addressinput.value);
+    alert('Address submitted'+$('#addressinput').val());
 });
 
 function resize(){
