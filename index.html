@@ -45,7 +45,7 @@
 			<li><a href="#contact">Contact</a></li>
 			</ul>
 		</div><!--/.nav-collapse -->
-		<a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">set Resources</a>
+		<a data-toggle="modal" href="#myModal" class="btn btn-info btn-sm">Set Resources</a>
 	</div>
 </div>
 <!-- Button trigger modal -->
@@ -57,10 +57,20 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Modal title</h4>
+          <h4 class="modal-title">Set resources available</h4>
         </div>
-        <div class="modal-body">
-          ...
+	<div class="modal-body">
+		<form class="form-inline" role="form">
+			<div class="form-group">
+				<label class="sr-only" for="exampleInputEmail2">Number of Tankers</label>
+				<input type="text" class="form-control" id="tankerCount" placeholder="Number of Tankers">
+			</div>
+			<div class="form-group">
+				<label class="sr-only" for="exampleInputPassword2">Tanker Capacity</label>
+				<input type="text" class="form-control" id="tankerCapacity" placeholder="Capacity of each tanker">
+			</div>
+			<button type="submit" class="btn btn-default">Sign in</button>
+		</form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
