@@ -101,7 +101,7 @@ document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 	var addr = document.getElementById('addressInput').value;
 	alert('Address submitted: '+ addr);
 	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
-	console.log(data)
+	console.log(data.lat)
 	});
 });
 
