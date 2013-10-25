@@ -97,9 +97,12 @@ $(window).on("resize", resize);
 resize();
 
 document.getElementById('AddressForm').addEventListener('submit', function(ev) {
-    ev.preventDefault();
-    var addr = document.getElementById('addressInput').value;
-    alert('Address submitted: '+ addr);
+	ev.preventDefault();
+	var addr = document.getElementById('addressInput').value;
+
+	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
+		alert('Address submitted: '+ data.lat + "|" + data.lon);
+	});
 });
 
 function resize(){
@@ -218,12 +221,14 @@ function getNearestWater(fire){
 }
 
 function moveFire(addr){
-	newLatLong = "";
+	var lat = (e.latlng.lat);
+	var lng = (e.latlng.lng);
+	var newLatLng = new L.LatLng(lat, lng);
 	fire.setLatLng(newLatLng); 
+
 	map.removeLayer(water);
 	map.removeLayer(route);
 	getNearestWater(fire);
-
 }
 
 fire.on('dragend', function(event) {
