@@ -99,9 +99,9 @@ resize();
 document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 	ev.preventDefault();
 	var addr = document.getElementById('addressInput').value;
-
+	alert('Address submitted: '+ addr);
 	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
-		alert('Address submitted: '+ data.lat + "|" + data.lon);
+	console.log(data)
 	});
 });
 
