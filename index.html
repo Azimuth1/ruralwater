@@ -220,7 +220,7 @@ function getNearestWater(fire){
 function moveFire(addr){
 	var newLatLng;
 	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
-		newLatLng = new L.LatLng(data[0].lat, data[0].lon);
+		newLatLng = new L.LatLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
 	});
 	console.log(newLatLng);
 	fire.setLatLng(newLatLng); 
