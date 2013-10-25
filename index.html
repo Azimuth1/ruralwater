@@ -96,7 +96,11 @@ $('#map').css("height", ($(window).height() - mapmargin));
 $(window).on("resize", resize);
 resize();
 function resize(){
+        $('#map').css("height", ($(window).height() - (mapmargin+12)));    
+        $('#map').css("margin-top",-21);
 
+
+    /*
     if($(window).width()>=980){
         $('#map').css("height", ($(window).height() - mapmargin));    
         $('#map').css("margin-top",50);
@@ -104,6 +108,7 @@ function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
     }
+    */
 
 }
 var fire, water, route
