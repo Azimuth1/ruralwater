@@ -99,10 +99,7 @@ resize();
 document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 	ev.preventDefault();
 	var addr = document.getElementById('addressInput').value;
-	alert('Address submitted: '+ addr);
-	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
-		console.log(data[0].lat);
-	});
+	moveFire(addr);
 });
 
 function resize(){
@@ -221,9 +218,12 @@ function getNearestWater(fire){
 }
 
 function moveFire(addr){
-	var lat = (e.latlng.lat);
-	var lng = (e.latlng.lng);
-	var newLatLng = new L.LatLng(lat, lng);
+	var newLatLng;
+	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
+		console.log(data[0].lat + "," + data[0].lon);
+		newLatLng = new L.LatLng(data[0].lat, data[0].lon);
+	});
+
 	fire.setLatLng(newLatLng); 
 
 	map.removeLayer(water);
