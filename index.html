@@ -177,7 +177,7 @@ var fire, water, route
 			smoothFactor: 1
 		}).addTo(map);
 		route.bringToFront();
-		document.getElementById('info').innerHTML("<h4>Information about the nearest water source.</h4>"+response.route_instructions);
+		document.getElementById('info').innerHTML = "<h4>Information about the nearest water source.</h4>"+response.route_instructions;
 	}
 
 	function addScript(url) {
