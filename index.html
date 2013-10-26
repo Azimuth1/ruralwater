@@ -114,7 +114,8 @@ function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
 }
-var fire, water, route
+var fire, water, route;
+var gpm, roundTripTime;
 
 	var map = L.map('map').setView([ 39.12, -77.695], 11);
 	var markers = [];
@@ -177,7 +178,11 @@ var fire, water, route
 			smoothFactor: 1
 		}).addTo(map);
 		route.bringToFront();
-		document.getElementById('info').innerHTML = "<h4>Information about the nearest water source.</h4><p>Drive time: "+response.route_summary["total_time"]/60+" minutes.</p><p>"+response.route_instructions.join("<br>")+"</p>";
+
+		roundTripTime = (response.route_summary["total_time"]/60)*2+10;  //1 way * 2 plus some time for transition
+		gpm = calcGPM(document.getElementsById('numTankers'),document.getElementById('tankerCapacity'),roundTripTime);
+		infoString = "<h4>Information about the nearest water source.</h4><h5>GPM: " + gpm +"</h5><p>Drive time: "+ roundTripTime +" minutes.</p><p>"+response.route_instructions.join("<br>")+"</p>"
+		document.getElementById('info').innerHTML = infoString;
 	}
 
 	function addScript(url) {
@@ -224,6 +229,10 @@ function getNearestWater(fire){
 
 	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 
+}
+
+function calcGPM(tankerCount, tankerCapacity, roundTripTime){
+	return (tankerCount * tankerCapacity)/roundTripTime;
 }
 
 function moveFire(addr){
