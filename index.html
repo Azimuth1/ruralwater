@@ -175,7 +175,7 @@ var fire, water, route
 			smoothFactor: 1
 		}).addTo(map);
 		route.bringToFront();
-		document.getElementByTagName('info') [0].appendChild(response.routeInstructions);
+		document.getElementsByTagName('info') [0].appendChild(response.routeInstructions);
 	}
 
 	function addScript(url) {
