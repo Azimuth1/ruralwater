@@ -232,7 +232,8 @@ function getNearestWater(fire){
 
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){
 	console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
-	return (tankerCount * tankerCapacity)/roundTripTime;
+	var tempGpm = (tankerCount * tankerCapacity)/roundTripTime,2;
+	return tempGpm.toFixed(2);
 }
 
 function moveFire(addr){
