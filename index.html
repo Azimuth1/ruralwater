@@ -181,7 +181,7 @@ var gpm, roundTripTime;
 
 		roundTripTime = (response.route_summary["total_time"]/60)*2+10;  //1 way * 2 plus some time for transition
 		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
-		infoString = "<h4>Information about the nearest water source.</h4><h5>GPM: " + gpm +"</h5><p>Drive time: "+ roundTripTime +" minutes.</p><p>"+response.route_instructions.join("<br>")+"</p>"
+		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Drive time: "+ roundTripTime +" minutes.</p><p>"+response.route_instructions.join("<br>")+"</p>"
 		document.getElementById('info').innerHTML = infoString;
 	}
 
@@ -228,7 +228,6 @@ function getNearestWater(fire){
 	water.addTo(map);
 
 	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
-
 }
 
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){
