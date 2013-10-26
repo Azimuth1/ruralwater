@@ -181,7 +181,11 @@ var gpm, roundTripTime;
 
 		roundTripTime = (response.route_summary["total_time"]/60)*2+10;  //1 way * 2 plus some time for transition
 		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
-		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p>"+response.route_instructions.join("<br>")+"</p>"
+		directions = [];
+		for (var step in response.route_instructions) {
+			directions.push(step[0]);
+		}
+		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p>"+directions.join("<br>")+"</p>"
 		document.getElementById('info').innerHTML = infoString;
 	}
 
