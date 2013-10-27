@@ -185,7 +185,7 @@ var gpm, roundTripTime;
 		for (var step in response.route_instructions) {
 			directions.push(response.route_instructions[step][0]);
 		}
-		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p><ol><li><i class="fa fa2x fa-chevron-right"></i>"+directions.join("</li><li><i class="fa fa2x fa-chevron-right"></i>")+"</li></ol></p>"
+		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p><ol><li><i class="fa fa2x fa-chevron-right"></i> "+directions.join("</li><li><i class="fa fa2x fa-chevron-right"></i> ")+"</li></ol></p>"
 		document.getElementById('info').innerHTML = infoString;
 	}
 
