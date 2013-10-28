@@ -179,7 +179,7 @@ var gpm, roundTripTime;
 		}).addTo(map);
 		route.bringToFront();
 
-		roundTripTime = (response.route_summary["total_time"]/60)*2+10;  //1 way * 2 plus some time for transition
+		roundTripTime = (response.route_summary["total_time"]/60)*2;  //1 way * 2
 		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
 		directions = [];
 		for (var step in response.route_instructions) {
