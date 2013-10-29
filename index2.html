@@ -220,7 +220,13 @@ var gpm, roundTripTime;
 	
 function getNearestWater(fire){
 	firePt = L.latLng(fire.getLatLng());
-	var closest = index.nearest(firePt, 1);
+	var closest = index.nearest(firePt, 5);
+	var candidateDist = [];
+	for each (var candidate in closest) {
+		candidateDist.push();
+	}
+
+
 	var waterPt = closest[0];
         water = new cilogi.L.Marker(waterPt,{
 		fontIconSize: computeSizeFromZoom(),
