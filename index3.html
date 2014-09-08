@@ -243,11 +243,12 @@ dir.route({
         { latLng: { lat: waterPt.lat, lng: waterPt.lon } }
     ]
 });
- 
-map.addLayer(MQ.routing.routeLayer({
+route = MQ.routing.routeLayer({
     directions: dir,
     fitBounds: true
-}));
+});
+  
+map.addLayer(route);
 }
   
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){
