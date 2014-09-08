@@ -240,6 +240,8 @@ function getNearestWater(fire){
 
   //addScript('http://router.project-osrm.org/viaroute?loc=' + firePt.lat + ',' + firePt.lng + '&loc=' + waterPt.lat + ',' + waterPt.lon);
   
+  console.log(firePt, waterPt);
+  
 addScript('http://open.mapquestapi.com/directions/v2/route?key=Fmjtd%7Cluur2h6tnd%2Cb2%3Do5-9wa2lr&callback=getRoute&outFormat=json&routeType=fastest&timeType=1&enhancedNarrative=false&shapeFormat=raw&generalize=0&locale=en_US&unit=m&from=' + firePt.lat + ','+firePt.lon + '&to='+ waterPt.lat + ',' + waterPt.lon +  '&drivingStyle=2&highwayEfficiency=21.0');
 }
   
