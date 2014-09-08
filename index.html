@@ -170,8 +170,10 @@ var gpm, roundTripTime;
 	function getRoute(response) {
 		var point, points = [];
          console.log(response);
-		for (var i=0; i<response.route.shape.shapePoints.length; i++) {
-			point = new L.LatLng(response.route.shape.shapePoints[i][0] , response.route.shape.shapePoints[i][1]);
+      var numPoints = reponse.route.shape.shapePoints.length/2;
+      
+		for (var i=0; i<numPoints; i++) {
+			point = new L.LatLng(response.route.shape.shapePoints[2*i] , response.route.shape.shapePoints[2*i+1]);
 			points.push(point);
 		}
 		route= new L.Polyline(points, {
