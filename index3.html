@@ -117,6 +117,7 @@ function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
 }
+
 var fire, water, route;
 var gpm, roundTripTime;
 
@@ -169,7 +170,7 @@ var gpm, roundTripTime;
 
 	function getRoute(response) {
 		var point, points = [];
-         console.log(response);
+         //console.log(response);
       var numPoints = response.route.shape.shapePoints.length/2;
       
 		for (var i=0; i<numPoints; i++) {
@@ -197,7 +198,7 @@ var gpm, roundTripTime;
 		script = document.createElement('script');
 		script.type="text/javascript";
 		script.src=url;
-		document.getElementsByTagName('head') [0].appendChild(script);
+		document.getElementsByTagName('head')[0].appendChild(script);
 	}
 
  
@@ -222,11 +223,23 @@ var gpm, roundTripTime;
 	})
 	fire.addTo(map);
 	
+
+
+	
+
+
 function getNearestWater(fire){
 	firePt = L.latLng(fire.getLatLng());
+//	var closest = index.nearest(firePt, 5);
 	var closest = index.nearest(firePt, 1);
+	var candidateDist = [];
+//	for each (var candidate in closest) {
+//		candidateDist.push();
+//	}
+
+
 	var waterPt = closest[0];
-        water = new cilogi.L.Marker(waterPt,{
+    water = new cilogi.L.Marker(waterPt,{
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043", //water drop
 		fontIconColor: "#000099",
@@ -235,24 +248,10 @@ function getNearestWater(fire){
 	})
 	water.addTo(map);
 
-dir = MQ.routing.directions();
- 
-dir.route({
-    locations: [
-        { latLng: { lat: firePt.lat, lng: firePt.lon } },
-        { latLng: { lat: waterPt.lat, lng: waterPt.lon } }
-    ]
-});
-route = MQ.routing.routeLayer({
-    directions: dir,
-    fitBounds: true
-});
-  
-map.addLayer(route);
-console.log(route);
+	addScript('http://api.tiles.mapbox.com/v4/directions/mapbox.driving/' + firePt.lat + ',' + firePt.lng + ';' + waterPt.lat + ',' + waterPt.lon +  '.json?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg');
 }
 
-  
+// 	 + '/car.js?callback=getRoute');
   
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){
 	console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
