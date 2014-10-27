@@ -124,24 +124,16 @@ var gpm, roundTripTime;
 
 	var map = L.map('map').setView([ 39.12, -77.695], 11);
 	var markers = [];
-	var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
+	var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
 		attribution: 'Azimuth1',
 		maxZoom: 22
 	});
 
-    var routerControl = L.Routing.control({
-        itinerary: { 
-        	units: 'imperial'
-        },
-    	fitSelectedRoutes: false,
-    	routeWhileDragging: false,
-    	addWaypoints: false,
-    	waypointIcon: function(i) {
-			return null;
-		}
-    });
-    routerControl.addTo(map);
 
+    var routerControl = L.Routing.control({
+        fitSelectedRoutes: false,
+   	});
+    routerControl.addTo(map);
 
 
 	var watersources;
@@ -228,33 +220,23 @@ function getNearestWater(fire){
 	})
 	water.addTo(map);
 
-/*
-	routerControl.setWaypoints([
-        L.latLng(firePt.lat, firePt.lng),
-        L.latLng(waterPt.lat, waterPt.lon)
-    ]);
-*/
-    var osrm = L.Routing.osrm();
 
-    osrm.route([
-    	L.latLng(firePt.lat, firePt.lng),
-    	L.latLng(waterPt.lat, waterPt.lon)
-    ]);
+	router = L.Routing.osrm();
+	   waypoints = [{
+	       latLng: firePt
+	   }, {
+	       latLng: L.latLng(waterPt.lat, waterPt.lon)
+	   }];
 
-/*
-	routerControl.line(
-		L.Routing.osrm([
-			L.latLng(firePt.lat, firePt.lng),
-			L.latLng(waterPt.lat, waterPt.lon)
-		])
-	);
-*/
 
-    gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
+	router.route(waypoints, function(err, routes) {
+	    //console.log(routes);
+	    gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,routes[0].summary.totalTime);
+	    console.log(gpm);
+	    L.Routing.line(routes[0]).addTo(map);
+	})
 		
 }
-
-// 	 + '/car.js?callback=getRoute');
   
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){
 	console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
@@ -269,14 +251,14 @@ function moveFire(addr){
 		fire.setLatLng([parseFloat(data[0].lat), parseFloat(data[0].lon)]); 
 	});
 	map.removeLayer(water);
-	map.removeLayer(route);
+	router.spliceWaypoints(0, 2);  // remove the old route
 	getNearestWater(fire);
 }
 
 fire.on('dragend', function(event) {
 	//console.log(fire.getLatLng());
 	map.removeLayer(water);
-	map.removeLayer(route);
+	router.spliceWaypoints(0, 2);  // remove the old route
 	getNearestWater(fire);
 });
 
