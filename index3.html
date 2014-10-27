@@ -13,6 +13,7 @@
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
 <![endif]-->
+<link rel="stylesheet" href="leaflet-routing-machine.css" />
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="cilogi-marker.css">
 <style>
@@ -94,8 +95,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-<!-- <script src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Fmjtd%7Cluur2h6tnd%2Cb2%3Do5-9wa2lr"></script>
-<script src="http://www.mapquestapi.com/sdk/leaflet/v1.0/mq-routing.js?key=Fmjtd%7Cluur2h6tnd%2Cb2%3Do5-9wa2lr"></script> -->
+<script src="leaflet-routing-machine.js"></script>
 <script src="cilogi-marker.min.js"></script>
 <script src="leaflet-knn.min.js"></script>
 
@@ -113,6 +113,7 @@ document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 	moveFire(addr);
 });
 
+
 function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
@@ -127,6 +128,22 @@ var gpm, roundTripTime;
 		attribution: 'Azimuth1',
 		maxZoom: 22
 	});
+
+    var routerControl = L.Routing.control({
+        itinerary: { 
+        	units: 'imperial'
+        },
+    	fitSelectedRoutes: false,
+    	routeWhileDragging: false,
+    	addWaypoints: false,
+    	waypointIcon: function(i) {
+			return null;
+		}
+    });
+    routerControl.addTo(map);
+
+
+
 	var watersources;
 	baseLayer.addTo(map);
 	var baseballIcon = L.icon({
@@ -168,39 +185,6 @@ var gpm, roundTripTime;
 	});
 	watersources.addTo(map);
 
-	function getRoute(response) {
-		var point, points = [];
-         //console.log(response);
-      var numPoints = response.route.shape.shapePoints.length/2;
-      
-		for (var i=0; i<numPoints; i++) {
-			point = new L.LatLng(response.route.shape.shapePoints[2*i] , response.route.shape.shapePoints[2*i+1]);
-			points.push(point);
-		}
-		route= new L.Polyline(points, {
-			weight: 3,
-			opacity: 0.5,
-			smoothFactor: 1
-		}).addTo(map);
-		route.bringToFront();
-
-		roundTripTime = (response.route_summary["total_time"]/60)*2;  //1 way * 2
-		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
-		directions = [];
-		for (var step in response.route_instructions) {
-			directions.push(response.route_instructions[step][0]);
-		}
-		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p><ol><li>"+directions.join("</li><li></i> ")+"</li></ol></p>"
-		document.getElementById('info').innerHTML = infoString;
-	}
-
-	function addScript(url) {
-		script = document.createElement('script');
-		script.type="text/javascript";
-		script.src=url;
-		document.getElementsByTagName('head')[0].appendChild(script);
-	}
-
  
 	function computeSizeFromZoom() {
 		var max = map.getMaxZoom(),
@@ -224,11 +208,8 @@ var gpm, roundTripTime;
 	fire.addTo(map);
 	
 
-
-	
-
-
 function getNearestWater(fire){
+	firePt = L.latLng(fire.getLatLng());
 	firePt = L.latLng(fire.getLatLng());
 //	var closest = index.nearest(firePt, 5);
 	var closest = index.nearest(firePt, 1);
@@ -236,7 +217,6 @@ function getNearestWater(fire){
 //	for each (var candidate in closest) {
 //		candidateDist.push();
 //	}
-
 
 	var waterPt = closest[0];
     water = new cilogi.L.Marker(waterPt,{
@@ -248,7 +228,30 @@ function getNearestWater(fire){
 	})
 	water.addTo(map);
 
-	addScript('http://api.tiles.mapbox.com/v4/directions/mapbox.driving/' + firePt.lat + ',' + firePt.lng + ';' + waterPt.lat + ',' + waterPt.lon +  '.json?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg');
+/*
+	routerControl.setWaypoints([
+        L.latLng(firePt.lat, firePt.lng),
+        L.latLng(waterPt.lat, waterPt.lon)
+    ]);
+*/
+    var osrm = L.Routing.osrm();
+
+    osrm.route([
+    	L.latLng(firePt.lat, firePt.lng),
+    	L.latLng(waterPt.lat, waterPt.lon)
+    ]);
+
+/*
+	routerControl.line(
+		L.Routing.osrm([
+			L.latLng(firePt.lat, firePt.lng),
+			L.latLng(waterPt.lat, waterPt.lon)
+		])
+	);
+*/
+
+    gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
+		
 }
 
 // 	 + '/car.js?callback=getRoute');
