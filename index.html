@@ -258,7 +258,7 @@ function moveFire(addr){
 fire.on('dragend', function(event) {
 	//console.log(fire.getLatLng());
 	map.removeLayer(water);
-	router.spliceWaypoints(0, 2);  // remove the old route
+	//router.spliceWaypoints(0, 2);  // remove the old route
 	getNearestWater(fire);
 });
 
