@@ -6,12 +6,14 @@
 <title>Loudoun County Rural Water Supply</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
 <![endif]-->
+<link rel="stylesheet" href="leaflet-routing-machine.css" />
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="cilogi-marker.css">
 <style>
@@ -92,7 +94,10 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+
+<script src="leaflet-routing-machine.js"></script>
 <script src="cilogi-marker.min.js"></script>
 <script src="leaflet-knn.min.js"></script>
 
@@ -110,21 +115,29 @@ document.getElementById('AddressForm').addEventListener('submit', function(ev) {
 	moveFire(addr);
 });
 
+
 function resize(){
         $('#map').css("height", ($(window).height() - (mapmargin+12)));    
         $('#map').css("margin-top",-21);
 }
+
 var fire, water, route;
 var gpm, roundTripTime;
 
 	var map = L.map('map').setView([ 39.12, -77.695], 11);
 	var markers = [];
-	var baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png', {
-		//var baseLayer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/22677/256/{z}/{x}/{y}.png', {
-		//key: 'BC9A493B41014CAABB98F0471D759707',
+	var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
 		attribution: 'Azimuth1',
 		maxZoom: 22
 	});
+
+/*
+    var routerControl = L.Routing.control({
+        fitSelectedRoutes: false,
+   	});
+    routerControl.addTo(map);
+*/
+
 	var watersources;
 	baseLayer.addTo(map);
 	var baseballIcon = L.icon({
@@ -155,46 +168,16 @@ var gpm, roundTripTime;
 		onEachFeature: onEachFeature,
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, {
-				radius: 8,
-				fillColor: "#ff7800",
+				radius: 6,
+				fillColor: "#0078ff",
 				color: "#000",
 				weight: 1,
 				opacity: 1,
-				fillOpacity: 0.8
+				fillOpacity: 0.75
 			});
 		}
 	});
 	watersources.addTo(map);
-
-	function getRoute(response) {
-		var point, points = [];
-		for (var i=0; i<response.route_geometry.length; i++) {
-			point = new L.LatLng(response.route_geometry[i][0] , response.route_geometry[i][1]);
-			points.push(point);
-		}
-		route= new L.Polyline(points, {
-			weight: 3,
-			opacity: 0.5,
-			smoothFactor: 1
-		}).addTo(map);
-		route.bringToFront();
-
-		roundTripTime = (response.route_summary["total_time"]/60)*2;  //1 way * 2
-		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,roundTripTime);
-		directions = [];
-		for (var step in response.route_instructions) {
-			directions.push(response.route_instructions[step][0]);
-		}
-		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ roundTripTime.toFixed(2) +" minutes.</p><p><ol><li>"+directions.join("</li><li></i> ")+"</li></ol></p>"
-		document.getElementById('info').innerHTML = infoString;
-	}
-
-	function addScript(url) {
-		script = document.createElement('script');
-		script.type="text/javascript";
-		script.src=url;
-		document.getElementsByTagName('head') [0].appendChild(script);
-	}
 
  
 	function computeSizeFromZoom() {
@@ -218,17 +201,36 @@ var gpm, roundTripTime;
 	})
 	fire.addTo(map);
 	
+
 function getNearestWater(fire){
 	firePt = L.latLng(fire.getLatLng());
+	firePt = L.latLng(fire.getLatLng());
 	var closest = index.nearest(firePt, 5);
+//	var closest = index.nearest(firePt, 1);
 	var candidateDist = [];
-	for each (var candidate in closest) {
-		candidateDist.push();
-	}
+	closest.forEach(function(candidate) {
+		router = L.Routing.osrm();
+		   waypoints = [{
+		       latLng: firePt
+		   }, {
+		       latLng: L.latLng(candidate.lat, candidate.lon)
+		   }];
+		router.route(waypoints, function(err, routes) {
+			candidateDist.push(routes[0]);
+		});
+
+	}); //  /getNearestWater
+
+	console.log(candidateDist);
+/*
+	gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,routes[0].summary.totalTime/60);
+	routeLayer = L.Routing.line(routes[0]).addTo(map);
+	infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(routes[0].summary.totalTime/60,2) +" minutes.</p><p><ol><li>"; //+ _.pluck(routes[0].instructions(roads)).join("</li><li></i> ")+"</li></ol></p>"
+	document.getElementById('info').innerHTML = infoString;
 
 
 	var waterPt = closest[0];
-        water = new cilogi.L.Marker(waterPt,{
+    water = new cilogi.L.Marker(waterPt,{
 		fontIconSize: computeSizeFromZoom(),
 		fontIconName: "\uf043", //water drop
 		fontIconColor: "#000099",
@@ -236,11 +238,12 @@ function getNearestWater(fire){
 		opacity: 1
 	})
 	water.addTo(map);
+*/
 
-	addScript('http://routes.cloudmade.com/0e0491f21622495da28cf15c92bf9419/api/0.3/' + firePt.lat + ',' + firePt.lng + ',' + waterPt.lat + ',' + waterPt.lon + '/car.js?callback=getRoute');
 }
+  
 
-function calcGPM(tankerCount, tankerCapacity, roundTripTime){
+function calcGPM(tankerCount, tankerCapacity, roundTripTime){  // tankerCount (integer count), tankerCapacity (gallons), roundTripTime (minutes)
 	console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
 	var fillTime = 2.5;
 	var dumpTime = 2.5;
@@ -253,14 +256,13 @@ function moveFire(addr){
 		fire.setLatLng([parseFloat(data[0].lat), parseFloat(data[0].lon)]); 
 	});
 	map.removeLayer(water);
-	map.removeLayer(route);
+	map.removeLayer(routeLayer);  // remove the old route
 	getNearestWater(fire);
 }
 
 fire.on('dragend', function(event) {
-	//console.log(fire.getLatLng());
 	map.removeLayer(water);
-	map.removeLayer(route);
+	map.removeLayer(routeLayer);  // remove the old route
 	getNearestWater(fire);
 });
 
