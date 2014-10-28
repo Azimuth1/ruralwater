@@ -234,11 +234,20 @@ function getNearestWater(fire){
 	router.route(waypoints, function(err, routes) {
 	    gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,routes[0].summary.totalTime/60);
 	    routeLayer = L.Routing.line(routes[0]).addTo(map);
-	    infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(routes[0].summary.totalTime/60,2) +" minutes.</p><p><ol><li>"; //+ _.pluck(routes[0].instructions(roads)).join("</li><li></i> ")+"</li></ol></p>"
-		document.getElementById('info').innerHTML = infoString;
+	    infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(routes[0].summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
 
+	    for (i = 0; i < routes[0].instructions.length; ++i) {
+	    	step = routes[0].instructions[i];
+	    	if (step.type == "DestinationReached"){
+	    		infoString += "Arrive at Destination ";
+	    		continue;
+	    	}
+            infoString += step.type + " " + step.direction + " on " + step.road + " for " + step.distance + " feet.</li><li></i> ";
+	    } 
+        infoString += "</li></ol></p>";
+		document.getElementById('info').innerHTML = infoString;
 	})
-		
+
 }
   
 
