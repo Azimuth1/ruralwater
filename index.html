@@ -260,7 +260,7 @@ function calcGPM(tankerCount, tankerCapacity, roundTripTime){  // tankerCount (i
 }
 
 function moveFire(addr){
-	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json", function( data ) {
+	$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"+VA&format=json", function( data ) {
 		fire.setLatLng([parseFloat(data[0].lat), parseFloat(data[0].lon)]); 
 	});
 	map.removeLayer(water);
