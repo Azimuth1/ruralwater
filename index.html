@@ -263,7 +263,7 @@ function moveFire(addr){
 	//$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json&viewbox=-77.968296,39.328613,-77.318729,38.841471", function( data ) {
 	$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address="+addr.split(' ').join('+')+"&bounds=-118.604794,34.172684|-118.500938,34.236144&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function( data ) {
 		console.log(data);
-		fire.setLatLng([parseFloat(data[0].geometry.lat), parseFloat(data[0].geometry.lng)]); 
+		fire.setLatLng([parseFloat(data[0].geometry.location.lat), parseFloat(data[0].geometry.location.lng)]); 
 		map.removeLayer(water);
 		map.removeLayer(routeLayer);  // remove the old route
 		getNearestWater(fire);
