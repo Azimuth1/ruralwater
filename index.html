@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<title>Loudoun County Rural Water Supply</title>
+<title>FireRoute - Loudoun County</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,7 +34,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">Rural Water Supply</a>
+    <a class="navbar-brand" href="#">FireRoute</a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -416,12 +416,20 @@ map.addControl(new L.Control.Layers( { 'Google':ggl, 'Google Terrain':ggl2}, {})
 function getNearestWater(fire){
 	firePt = L.latLng(fire.getLatLng());
 	firePt = L.latLng(fire.getLatLng());
-//	var closest = index.nearest(firePt, 5);
-	var closest = index.nearest(firePt, 1);
+	var closest = index.nearest(firePt, 5);
+//	var closest = index.nearest(firePt, 1);
+	//console.log(closest);
 	var candidateDist = [];
-//	for each (var candidate in closest) {
-//		candidateDist.push();
-//	}
+	closest.forEach( function (candidate){
+	    var x = candidate.lat + " " + candidate.lon;
+    	console.log(x);
+    	// check candidates for travel time 
+
+
+	});
+
+
+	
 
 	var waterPt = closest[0];
     water = new cilogi.L.Marker(waterPt,{
@@ -463,7 +471,7 @@ function getNearestWater(fire){
   
 
 function calcGPM(tankerCount, tankerCapacity, roundTripTime){  // tankerCount (integer count), tankerCapacity (gallons), roundTripTime (minutes)
-	console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
+	//console.log(parseInt(tankerCount) + "|" + parseInt(tankerCapacity) + "|" + roundTripTime);
 	var fillTime = 2.5;
 	var dumpTime = 2.5;
 	var tempGpm = (tankerCount * tankerCapacity*0.8)/(roundTripTime+dumpTime+fillTime);
