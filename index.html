@@ -489,7 +489,7 @@ function compareRoutes(candidateDist,candidateRoutes){
 		console.log("Shortest Element: "+candidateDist.indexOf(Math.min.apply(Math, candidateDist)));
 		console.log("Shortest Dist: "+Math.min.apply(Math, candidateDist));
 		var r = candidateRoutes[candidateDist.indexOf(Math.min.apply(Math, candidateDist))];
-		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,r.summary.totalTime/60);
+		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,(r.summary.totalTime/60)*2);
 		routeLayer = L.Routing.line(r).addTo(map);
 		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
 
