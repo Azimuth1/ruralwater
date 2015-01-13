@@ -116,7 +116,8 @@ L.Google = L.Class.extend({
 
 	options: {
 		minZoom: 0,
-		maxZoom: 18,
+		maxZoom: 22,
+		maxnativeZom: 20,
 		tileSize: 256,
 		subdomains: 'abc',
 		errorTileUrl: '',
@@ -336,10 +337,10 @@ var gpm, roundTripTime;
 	});
 
 
-var ggl = new L.Google();
-var ggl2 = new L.Google('TERRAIN');
+var ggl = new L.Google('HYBRID');
+//var ggl2 = new L.Google('TERRAIN');
 map.addLayer(ggl);
-map.addControl(new L.Control.Layers( { 'Google':ggl, 'Google Terrain':ggl2}, {}));
+//map.addControl(new L.Control.Layers( { 'Google':ggl, 'Google Terrain':ggl2}, {}));
 
 
 /*
@@ -413,59 +414,44 @@ map.addControl(new L.Control.Layers( { 'Google':ggl, 'Google Terrain':ggl2}, {})
 	fire.addTo(map);
 	
 
-function getNearestWater(fire){
+function getNearestWater(fire,cb){
+
+
+var candidateDist = [];
+var candidateRoutes = [];
+
 	firePt = L.latLng(fire.getLatLng());
 	firePt = L.latLng(fire.getLatLng());
-	var closest = index.nearest(firePt, 5);
+	var closest = index.nearest(firePt, 10); 
+	var count = 0;
+	var length = closest.length;
 //	var closest = index.nearest(firePt, 1);
 	//console.log(closest);
-	var candidateDist = [];
+	router = L.Routing.osrm();
 	closest.forEach( function (candidate){
 	    var x = candidate.lat + " " + candidate.lon;
-    	console.log(x);
     	// check candidates for travel time 
+		
+		waypoints = [{
+			latLng: firePt
+		}, {
+			latLng: L.latLng(candidate.lat, candidate.lon)
+		}];
+
+		router.route(waypoints, function(err, routes) {
+			count++;
+			candidateDist.push(routes[0].summary.totalTime);
+			candidateRoutes.push(routes[0]);
+
+		
+		if(count==length){
+    		cb(candidateDist,candidateRoutes);
+    	}
 
 
+		})
 	});
 
-
-	
-
-	var waterPt = closest[0];
-    water = new cilogi.L.Marker(waterPt,{
-		fontIconSize: computeSizeFromZoom(),
-		fontIconName: "\uf043", //water drop
-		fontIconColor: "#000099",
-		fontIconFont: 'awesome',
-		opacity: 1
-	})
-	water.addTo(map);
-
-
-	router = L.Routing.osrm();
-	   waypoints = [{
-	       latLng: firePt
-	   }, {
-	       latLng: L.latLng(waterPt.lat, waterPt.lon)
-	   }];
-
-
-	router.route(waypoints, function(err, routes) {
-	    gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,routes[0].summary.totalTime/60);
-	    routeLayer = L.Routing.line(routes[0]).addTo(map);
-	    infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(routes[0].summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
-
-	    for (i = 0; i < routes[0].instructions.length; ++i) {
-	    	step = routes[0].instructions[i];
-	    	if (step.type == "DestinationReached"){
-	    		infoString += "Arrive at Destination ";
-	    		continue;
-	    	}
-            infoString += step.type + " " + step.direction + " on " + step.road + " for " + step.distance + " feet.</li><li></i> ";
-	    } 
-        infoString += "</li></ol></p>";
-		document.getElementById('info').innerHTML = infoString;
-	})
 
 }
   
@@ -482,22 +468,56 @@ function moveFire(addr){
 	//$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json&viewbox=-77.968296,39.328613,-77.318729,38.841471", function( data ) {
 	$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address="+addr.split(' ').join('+')+"&bounds=-118.604794,34.172684|-118.500938,34.236144&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function( data ) {
 		var pt = data.results[0];
-		console.log(pt);
+		//console.log(pt);
 		fire.setLatLng([parseFloat(pt.geometry.location.lat), parseFloat(pt.geometry.location.lng)]); 
 		map.removeLayer(water);
 		map.removeLayer(routeLayer);  // remove the old route
-		getNearestWater(fire);
+		getNearestWater(fire, compareRoutes);
 	});
 }
 
 fire.on('dragend', function(event) {
 	map.removeLayer(water);
 	map.removeLayer(routeLayer);  // remove the old route
-	getNearestWater(fire);
+	getNearestWater(fire, compareRoutes);
 });
 
 
-getNearestWater(fire);
+
+function compareRoutes(candidateDist,candidateRoutes){
+		console.log(candidateDist,candidateRoutes);
+		console.log("Shortest Element: "+candidateDist.indexOf(Math.min.apply(Math, candidateDist)));
+		console.log("Shortest Dist: "+Math.min.apply(Math, candidateDist));
+		var r = candidateRoutes[candidateDist.indexOf(Math.min.apply(Math, candidateDist))];
+		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,r.summary.totalTime/60);
+		routeLayer = L.Routing.line(r).addTo(map);
+		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
+
+	    for (i = 0; i < r.instructions.length; ++i) {
+	    	step = r.instructions[i];
+	    	if (step.type == "DestinationReached"){
+	    		infoString += "Arrive at Destination ";
+	    		continue;
+	    	}
+	        infoString += step.type + " " + step.direction + " on " + step.road + " for " + step.distance + " feet.</li><li></i> ";
+	    } 
+	    infoString += "</li></ol></p>";
+		document.getElementById('info').innerHTML = infoString;
+
+		var waterPt = L.latLng([r.waypoints[1][0],r.waypoints[1][1]]);
+		console.log("water source index: "+candidateDist.indexOf(Math.min.apply(Math, candidateDist)))
+	    water = new cilogi.L.Marker(waterPt,{
+			fontIconSize: computeSizeFromZoom(),
+			fontIconName: "\uf043", //water drop
+			fontIconColor: "#000099",
+			fontIconFont: 'awesome',
+			opacity: 1
+		})
+		water.addTo(map);
+};
+
+
+getNearestWater(fire,compareRoutes);
 
 </script>
 </body>
