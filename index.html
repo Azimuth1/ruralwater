@@ -329,7 +329,7 @@ function resize(){
 var fire, water, route;
 var gpm, roundTripTime;
 
-	var map = L.map('map').setView([ 39.12, -77.695], 11);
+	var map = L.map('map').setView([ 39.12, -77.695], 12);
 	var markers = [];
 	var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
 		attribution: 'Azimuth1',
@@ -402,7 +402,7 @@ map.addLayer(ggl);
 
 	var index = leafletKnn(watersources);
 
-	var firePt = new L.latLng([39.195, -77.6]);
+	var firePt = new L.latLng([39.115, -77.66]);
         fire = new cilogi.L.Marker(firePt,{
 		draggable: true, 
 		fontIconSize: computeSizeFromZoom(),
