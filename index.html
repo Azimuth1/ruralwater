@@ -17,10 +17,8 @@
 <link rel="stylesheet" href="leaflet-routing-machine.css" />
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="cilogi-marker.css">
-<style>
-	 html, body {height: 100%;}
-	 .fill {min-height: 100%;height: 100%;}
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+
 
 </head> 
 <body>
@@ -34,18 +32,22 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="#">FireRoute</a>
+
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse navbar-ex1-collapse">
 	<form id="AddressForm" class="navbar-form navbar-left" role="search">
 		<div class="form-group">
-			<input type="text" id="addressInput" class="form-control input-sm" placeholder="Address:  123 Any Street">
+			<input type="text" id="addressInput" class="form-control input-sm" placeholder="Addr: 123 Any Street">
 		</div>
 		<button type="submit" class="btn btn-default btn-sm">Submit</button>
 	</form>
-	<a data-toggle="modal" href="#myModal" class="btn btn-info btn-sm navbar-btn">Set Resources</a>
+	<a data-toggle="modal" href="#myModal" class="btn btn-info btn-sm navbar-btn">Set Water Shuttle Resources </a>
+	<ul class="nav navbar-nav navbar-right">
+      <li><a href="http://azimuth1.com">A project by <img src="Azimuth1_color_small.png" class="img-rounded" alt="Azimuth1"></a></li>
+    </ul>
+
 </div><!-- /.navbar-collapse -->
 </nav>
 
@@ -85,10 +87,11 @@
 
 
 	<div class="row">
-		<div id="info" class="col-md-2">
-			<h4>Information about the nearest water source.</h4>
+		<div id="info" class="col-md-3 infobox">
+			<a href="http://fireroute.us"><img src="fireroute-logo.png" alt="FireRoute"></a>
+		<h4>Information about the nearest water source.</h4>
 		</div>
-		<div id="mapwrapper" class="col-md-10">
+		<div id="mapwrapper" class="col-md-9">
 			<div id="map"></div>
 		</div> <!-- mapwrapper -->
 	</div>
@@ -499,7 +502,7 @@ function compareRoutes(candidateDist,candidateRoutes){
 		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,(r.summary.totalTime/60)*2);
 		console.log("gpm,"+gpm+","+r.waypoints[0][0]+","+r.waypoints[0][1]);
 		routeLayer = L.Routing.line(r).addTo(map);
-		infoString = "<h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
+		infoString = "<a href='http://firerout.us'><img src='fireroute-logo.png' alt='FireRoute'></a><h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
 
 	    for (i = 0; i < r.instructions.length; ++i) {
 	    	step = r.instructions[i];
