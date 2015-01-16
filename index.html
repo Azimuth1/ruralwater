@@ -41,9 +41,9 @@
 		<div class="form-group">
 			<input type="text" id="addressInput" class="form-control input-sm" placeholder="Addr: 123 Any Street">
 		</div>
-		<button type="submit" class="btn btn-default btn-sm">Submit</button>
+		<button type="submit" class="btn btn-default btn-sm btn-submit">Submit</button>
 	</form>
-	<a data-toggle="modal" href="#myModal" class="btn btn-info btn-sm navbar-btn">Set Water Shuttle Resources </a>
+	<a data-toggle="modal" href="#myModal" class="btn btn-info btn-sm navbar-btn btn-resources">Set Water Shuttle Resources </a>
 	<ul class="nav navbar-nav navbar-right">
       <li><a href="http://azimuth1.com">Created by <img src="Azimuth1_color_small.png" style="vertical-align:text-bottom" class="img-rounded" alt="Azimuth1"></a></li>
     </ul>
@@ -77,8 +77,8 @@
 		</form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-default btn-submit" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-resources">Save changes</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -330,7 +330,10 @@ function resize(){
         $('#map').css("margin-top",-21);
 }
 
-var fire, water, route;
+var fire;
+var water;
+var route;
+var routeLayer;
 var gpm, roundTripTime;
 
 	var map = L.map('map').setView([ 39.12, -77.695], 12);
@@ -423,7 +426,6 @@ function getNearestWater(fire,cb){
 	var candidateRoutes = [];
 
 	firePt = L.latLng(fire.getLatLng());
-	firePt = L.latLng(fire.getLatLng());
 	var closest = index.nearest(firePt, 10); 
 	var count = 0;
 	var length = closest.length;
@@ -441,7 +443,7 @@ function getNearestWater(fire,cb){
 			candidateDist.push(routes[0].summary.totalTime);
 			candidateRoutes.push(routes[0]);
 			if(count==length){
-	    		cb(candidateDist,candidateRoutes);
+	    		cb(candidateDist,candidateRoutes,addr);
 	    	}
 		})
 	});
@@ -465,7 +467,7 @@ function moveFire(addr){
 		fire.setLatLng([parseFloat(pt.geometry.location.lat), parseFloat(pt.geometry.location.lng)]); 
 		map.removeLayer(water);
 		map.removeLayer(routeLayer);  // remove the old route
-		getNearestWater(fire, compareRoutes);
+		getNearestWater(fire, compareRoutes, addr);
 	});
 }
 
