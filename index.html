@@ -443,7 +443,7 @@ function getNearestWater(fire,cb){
 			candidateDist.push(routes[0].summary.totalTime);
 			candidateRoutes.push(routes[0]);
 			if(count==length){
-	    		cb(candidateDist,candidateRoutes,addr);
+	    		cb(candidateDist,candidateRoutes);
 	    	}
 		})
 	});
@@ -462,6 +462,7 @@ function calcGPM(tankerCount, tankerCapacity, roundTripTime){  // tankerCount (i
 function moveFire(addr){
 	//$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json&viewbox=-77.968296,39.328613,-77.318729,38.841471", function( data ) {
 	$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address="+addr.split(' ').join('+')+"&bounds=-118.604794,34.172684|-118.500938,34.236144&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function( data ) {
+	//$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address="+addr.split(' ').join('+')+"&bounds=-77.968296,39.328613|-77.318729,38.841471&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function( data ) {
 		var pt = data.results[0];
 		//console.log(pt);
 		fire.setLatLng([parseFloat(pt.geometry.location.lat), parseFloat(pt.geometry.location.lng)]); 
@@ -504,15 +505,16 @@ function compareRoutes(candidateDist,candidateRoutes){
 		gpm = calcGPM(document.getElementById('numTankers').value,document.getElementById('tankerCapacity').value,(r.summary.totalTime/60)*2);
 		console.log("gpm,"+gpm+","+r.waypoints[0][0]+","+r.waypoints[0][1]);
 		routeLayer = L.Routing.line(r).addTo(map);
-		infoString = "<a href='http://firerout.us'><img src='fireroute-logo.png' alt='FireRoute'></a><h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
+		infoString = "<a href='http://fireroute.us'><img src='fireroute-logo.png' alt='FireRoute'></a><h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm +"</p><p>Round trip: "+ Math.round(r.summary.totalTime/60,2) +" minutes.</p><p><ol><li>";
 
 	    for (i = 0; i < r.instructions.length; ++i) {
 	    	step = r.instructions[i];
+	    	console.log(step);
 	    	if (step.type == "DestinationReached"){
 	    		infoString += "Arrive at Destination ";
 	    		continue;
 	    	}
-	        infoString += step.type + " " + step.direction + " on " + step.road + " for " + step.distance + " feet.</li><li></i> ";
+	        infoString += step.type + " " + step.direction + " on " + step.road + " for " + (step.distance*0.000621371).toFixed(2) + " miles.</li><li></i> ";  //multiply to go from meters to miles
 	    } 
 	    infoString += "</li></ol></p>";
 		document.getElementById('info').innerHTML = infoString;
