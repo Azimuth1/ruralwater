@@ -336,7 +336,9 @@ var route;
 var routeLayer;
 var gpm, roundTripTime;
 
-	var map = L.map('map').setView([ 39.12, -77.695], 12);
+	var map = L.map('map',{
+       attributionControl: false
+	}).setView([ 39.12, -77.695], 12);
 	var markers = [];
 	var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
 		attribution: 'Azimuth1',
@@ -504,7 +506,7 @@ function compareRoutes(candidateDist,candidateRoutes){
 
 	    for (i = 0; i < r.instructions.length; ++i) {
 	    	step = r.instructions[i];
-	    	console.log(step);
+	    	//console.log(step);
 	    	if (step.type == "DestinationReached"){
 	    		infoString += "Arrive at Destination ";
 	    		continue;
