@@ -472,11 +472,6 @@ function moveFire(addr){
 	});
 }
 
-fire.on('dragend', function(event) {
-	map.removeLayer(water);
-	map.removeLayer(routeLayer);  // remove the old route
-	getNearestWater(fire, compareRoutes);
-});
 
 function simFire(lat,lon){
 	fire.setLatLng([lat, lon]); 
