@@ -107,7 +107,7 @@
 
 
 <script src="sources.geojson"></script>
-<script src="random.geojson"></script>
+<!-- <script src="random.geojson"></script> -->
 <script>
 /*
  * Google layer using Google Maps API
@@ -382,20 +382,33 @@ map.addLayer(ggl);
 		layer.bindPopup(popupContent);
 	}
 
+# return color based on value
+function getValue(x) {
+	return x == "TANK" ? "#800026" :
+	       x == "POND" ? "#BD0026" :
+		       "#FFEDA0";
+}
+
+# style function 
+function waterStyle(feature) {
+	return {
+		color: getValue(feature.properties.Type),
+		//"stroke": false
+		radius: 6,
+		fillColor: "#0078ff",
+		weight: 1,
+		opacity: 1,
+		fillOpacity: 0.75
+	};
+}
+
 	watersources = L.geoJson([sources], {
 		style: function (feature) {
 			return feature.properties && feature.properties.style;
 		},
 		onEachFeature: onEachFeature,
 		pointToLayer: function (feature, latlng) {
-			return L.circleMarker(latlng, {
-				radius: 6,
-				fillColor: "#0078ff",
-				color: "#000",
-				weight: 1,
-				opacity: 1,
-				fillOpacity: 0.75
-			});
+			return L.circleMarker(latlng, waterStyle);
 		}
 	});
 	watersources.addTo(map);
