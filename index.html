@@ -413,13 +413,13 @@ function getValue(x) {
 // style function 
 function waterStyle(feature) {
 	return {
-		color: getValue(feature.properties.Type),
+		color: "#0078ff",
 		//"stroke": false
-		radius: 6,
-		fillColor: "#0078ff",
+		radius: 5,
+		fillColor: getValue(feature.properties.Type),
 		weight: 1,
 		opacity: 1,
-		fillOpacity: 0.75
+		fillOpacity: 0.85
 	};
 }
 
