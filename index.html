@@ -587,12 +587,7 @@
         infoString += "</li></ol></p>";
         document.getElementById('info').innerHTML = infoString;
 
-//////Zoom to Bounds
-        var p1 = L.latLng(r.waypoints[1][0], r.waypoints[1][1]);
-        var p2 = L.latLng(r.waypoints[0][0], r.waypoints[0][1]);
-        var bounds = L.latLngBounds(p1, p2).pad(.5)
-        map.fitBounds(bounds);
-//////
+
 
 
         var waterPt = L.latLng([r.waypoints[1][0], r.waypoints[1][1]]);
@@ -605,6 +600,17 @@
             opacity: 1
         })
         water.addTo(map);
+
+
+        //////Zoom to Bounds
+        var p1 = L.latLng(r.waypoints[1][0], r.waypoints[1][1]);
+        var p2 = L.latLng(r.waypoints[0][0], r.waypoints[0][1]);
+        map.panInsideBounds(L.latLngBounds(p1, p2))
+        //////
+
+
+
+
     };
 
 
