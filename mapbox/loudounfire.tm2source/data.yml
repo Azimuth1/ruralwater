@@ -1,0 +1,27 @@
+_prefs: 
+  disabled: []
+  inspector: false
+  mapid: mappiskyle.38c2175b
+  rev: s-f98b25fe
+  saveCenter: true
+attribution: ''
+center: 
+  - -77.6404
+  - 39.0533
+  - 11
+description: ''
+Layer: 
+  - id: loudoun
+    Datasource: 
+      file: /Users/KyleK/github/tests/loudoun.geojson
+      layer: loudoun
+      type: geojson
+    description: ''
+    fields: 
+      PropGPM: Number
+    properties: 
+      "buffer-size": 12
+    srs: +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
+maxzoom: 16
+minzoom: 11
+name: loudounFire2

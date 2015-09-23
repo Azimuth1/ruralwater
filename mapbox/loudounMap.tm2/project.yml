@@ -1,0 +1,31 @@
+_prefs: 
+  saveCenter: true
+_properties: 
+  bridge: 
+    "group-by": layer
+attribution: "<a href='https://www.mapbox.com/about/maps/' target='_blank'>&copy; Mapbox &copy; OpenStreetMap</a> <a class='mapbox-improve-map' href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
+bounds: 
+  - -180
+  - -85.0511
+  - 180
+  - 85.0511
+center: 
+  - -77.6253
+  - 39.1886
+  - 11
+description: ''
+format: "png8:m=h"
+interactivity_layer: loudoun
+layers: null
+maxzoom: 22
+minzoom: 0
+name: loudounMap
+source: "mapbox:///mapbox.mapbox-streets-v5,mappiskyle.38c2175b"
+styles: 
+  - style.mss
+template: |-
+  <strong>Calculated Water Flow</strong>
+  {{#PropGPM}}
+  <br /><small>{{PropGPM}}</small>
+  {{/PropGPM}}
+
