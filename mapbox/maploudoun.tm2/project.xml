@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+
+<Parameters>
+  <Parameter name="attribution"><![CDATA[<a href='https://www.mapbox.com/about/maps/' target='_blank'>&copy; Mapbox &copy; OpenStreetMap</a> <a class='mapbox-improve-map' href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>]]></Parameter>
+  <Parameter name="bounds">-180,-85.0511,180,85.0511</Parameter>
+  <Parameter name="center">-77.7463,39.0881,18</Parameter>
+  <Parameter name="format">png8:m=h</Parameter>
+  <Parameter name="interactivity_layer">loudoun</Parameter>
+  <Parameter name="interactivity_fields">PropGPM</Parameter>
+  <Parameter name="maxzoom">22</Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="name"><![CDATA[loudounMAP]]></Parameter>
+  <Parameter name="source"><![CDATA[mapbox:///mappiskyle.38c2175b]]></Parameter>
+  <Parameter name="template"><![CDATA[{{#PropGPM}}
+<strong>GPM: </strong><small>{{PropGPM}}</small>
+{{/PropGPM}}]]></Parameter>
+</Parameters>
+
+
+<Style name="loudoun" filter-mode="first">
+  <Rule>
+    <Filter>([PropGPM] &gt; 650)</Filter>
+    <MarkersSymbolizer fill="#99d594" allow-overlap="true" stroke-width="0" width="10" />
+  </Rule>
+  <Rule>
+    <Filter>([PropGPM] &gt; 550)</Filter>
+    <MarkersSymbolizer fill="#e6f598" allow-overlap="true" stroke-width="0" width="10" />
+  </Rule>
+  <Rule>
+    <Filter>([PropGPM] &gt; 450)</Filter>
+    <MarkersSymbolizer fill="#fee08b" allow-overlap="true" stroke-width="0" width="10" />
+  </Rule>
+  <Rule>
+    <Filter>([PropGPM] &gt; 350)</Filter>
+    <MarkersSymbolizer fill="#fc8d59" allow-overlap="true" stroke-width="0" width="10" />
+  </Rule>
+  <Rule>
+    <Filter>([PropGPM] &gt; 0)</Filter>
+    <MarkersSymbolizer fill="#d53e4f" allow-overlap="true" stroke-width="0" width="10" />
+  </Rule>
+  <Rule>
+    <MarkersSymbolizer allow-overlap="true" stroke-width="0" fill="#aa2200" width="10" />
+  </Rule>
+</Style>
+<Layer name="loudoun"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>loudoun</StyleName>  </Layer>
+
+</Map>

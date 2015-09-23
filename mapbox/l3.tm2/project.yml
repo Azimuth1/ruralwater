@@ -1,0 +1,25 @@
+_prefs: 
+  mapid: mappiskyle.5d7d0f2c
+  saveCenter: true
+_properties: {}
+attribution: ''
+bounds: 
+  - -180
+  - -85.0511
+  - 180
+  - 85.0511
+center: 
+  - -77.6112
+  - 39.1993
+  - 12
+description: ''
+format: "png8:m=h"
+interactivity_layer: ''
+layers: null
+maxzoom: 16
+minzoom: 0
+name: maploudoun
+source: "mapbox:///mapbox.mapbox-streets-v5,mappiskyle.38c2175b"
+styles: 
+  - style.mss
+template: ''
