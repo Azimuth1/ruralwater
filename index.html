@@ -402,7 +402,7 @@ map.addLayer(ggl);
 		layer.bindPopup(popupContent);
 	}
 
-# return color based on value
+// return color based on value
 function getValue(x) {
 	console.log(x);
 	return x == "TANK" ? "#800026" :
@@ -410,7 +410,7 @@ function getValue(x) {
 		       "#FFEDA0";
 }
 
-# style function 
+// style function 
 function waterStyle(feature) {
 	return {
 		color: getValue(feature.properties.Type),
