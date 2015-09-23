@@ -404,9 +404,8 @@ map.addLayer(ggl);
 
 // return color based on value
 function getValue(x) {
-	console.log(x);
-	return x == "TANK" ? "#800026" :
-	       x == "POND" ? "#BD0026" :
+	return x === "TANK" ? "#800026" :
+	       x === "POND" ? "#BDFF26" :
 		       "#FFEDA0";
 }
 
@@ -429,7 +428,8 @@ function waterStyle(feature) {
 		},
 		onEachFeature: onEachFeature,
 		pointToLayer: function (feature, latlng) {
-			return L.circleMarker(latlng, waterStyle);
+			var ws = waterStyle(feature);
+			return L.circleMarker(latlng, ws);
 		}
 	});
 	watersources.addTo(map);
