@@ -651,16 +651,30 @@
             fontIconColor: "#000099",
             fontIconFont: 'awesome',
             opacity: 1
-        })
+        });
         water.addTo(map);
 
 
         //////Zoom to Bounds
         var p1 = L.latLng(r.waypoints[1][0], r.waypoints[1][1]);
         var p2 = L.latLng(r.waypoints[0][0], r.waypoints[0][1]);
-        map.panInsideBounds(L.latLngBounds(p1, p2))
-            //////
-    };
+        var panBounds = L.latLngBounds(p1, p2);
+
+        /*var panBoundsZoom = map.getBoundsZoom(panBounds);
+        var mapZoom = map.getZoom();
+        console.log(panBoundsZoom, mapZoom);
+        if (panBoundsZoom < mapZoom) {
+            console.log('!!');
+            map.fitBounds(panBounds, {
+                animate: true
+            });
+        } else {*/
+            map.panInsideBounds(panBounds);
+        //}
+
+      
+
+    }
 
 
     getNearestWater(fire, compareRoutes);
