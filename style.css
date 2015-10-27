@@ -83,6 +83,7 @@ input#addressInput {
 .splashHeader {
     position: absolute;
     right: 15px;
+    top:15px;
     margin: 15px;
     background: #fff;
     padding: 5px 15px;

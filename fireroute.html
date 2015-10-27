@@ -663,13 +663,14 @@
         /*d3.select(elem).append("div").attr("class", "splashHeader").append('div').attr("class", 'text-info h3')
             .text('Select State/County to get started with FireRoute');
 */
-        var header = d3.select(elem).append("div").attr("class", "splashHeader"); //.style('top', '40px');
+
         /*
         header.append('div').attr("class", 'text-info h3')
                     .text('Select State/County to get started with FireRoute');*/
-        stateText = header.append('div').attr("class", 'text-primary h1'); //.text('Select State');
-        var countyText = header.append('div').attr("class", 'em h2'); //.text('Select State');;
-        var startBtn = header.append('button').attr("class", 'btn btn-primary hide').text('Start FireRoute!');;
+        var header = d3.select(elem).append("div").attr("class", "splashHeader hide");
+        stateText = header.append('div').attr("class", 'text-primary h1');
+        var countyText = header.append('div').attr("class", 'em h2');
+        var startBtn = header.append('button').attr("class", 'btn btn-primary hide').text('Start FireRoute!');
         var centered;
         var projection = d3.geo.albersUsa()
             .scale(1070)
@@ -712,6 +713,7 @@
                     }))
                     .attr("id", "state-borders")
                     .attr("d", path);
+                header.classed('hide', false);
             });
         });
 
