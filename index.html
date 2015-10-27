@@ -23,18 +23,20 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <style>
-        .map-legend {
+    .map-legend {
         width: 240px;
-        .legend label,
-        .legend span {
-            display: block;
-            float: left;
-            height: 15px;
-            width: 20%;
-            text-align: center;
-            font-size: 10px;
-            color: #808080;
-        }
+    }
+    
+    .legend label,
+    .legend span {
+        display: block;
+        float: left;
+        height: 15px;
+        width: 20%;
+        text-align: center;
+        font-size: 10px;
+        color: #808080;
+    }
     </style>
 </head>
 
@@ -113,6 +115,25 @@
             </a>
             <h4>Information about the nearest water source.</h4>
         </div>
+        <div id='legend' style='display:none;'>
+            <div class='legend'>
+                <strong>FireRoute Model</strong>
+                <nav class='legend_ clearfix'>
+                    <span style='background:#d53e4f;'></span>
+                    <span style='background:#fc8d59;'></span>
+                    <span style='background:#fee08b;'></span>
+                    <span style='background:#e6f598;'></span>
+                    <span style='background:#99d594;'></span>
+                    <label>0-350</label>
+                    <label>350-450</label>
+                    <label>450-550</label>
+                    <label>550-650</label>
+                    <label>>650</label>
+                    <small>Gallons/Minute
+                    </small>
+                </nav>
+            </div>
+        </div>
         <div id="mapwrapper" class="col-md-9">
             <div id="map"></div>
         </div>
@@ -122,7 +143,8 @@
     <div id="splash" class="topo"></div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <!--<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>-->
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
     <script src="leaflet-routing-machine.js"></script>
     <script src="cilogi-marker.min.js"></script>
@@ -130,6 +152,7 @@
     <script src="sources.geojson"></script>
     <!-- <script src="random.geojson"></script> -->
     <script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoibWFwcGlza3lsZSIsImEiOiI0OGU3NTI2ZDFkOTU2YmNlYTFmNGM4YTM2Y2NhNWM1NCJ9.UNhVkkf5Bd6SfOSESXvtMQ';
     /*
      * Google layer using Google Maps API
      */
@@ -363,34 +386,74 @@
     var routeLayer;
     var gpm, roundTripTime;
 
-    var map = L.map('map', {
-        attributionControl: false
-    })
-    .setView([37.63163475580643,-99.11865234374999], 5);
-    //.setView([39.12, -77.695], 12);
 
-   
-
-
-    var markers = [];
-    var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
+    var baseURL = 'https://api.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3lsZS1hemltdXRoMSIsImEiOiJiNjgwODliZmJmZGQyYjcyYjhhYzFkN2M4MTZjNjlkZSJ9.j4_XYU-hkLlAepVI6cRHew';
+    var baseLayer = L.tileLayer(baseURL, {
         attribution: 'Azimuth1',
         maxZoom: 22
     });
 
 
-    var ggl = new L.Google('HYBRID');
+    var map = L.mapbox.map('map', 'jasondalton.map-7z4qef6u', {
+        attributionControl: false
+    });
+    map.setView([37.63163475580643, -99.11865234374999], 5);
+    //map.setView([39.12, -77.695], 12);
+
+
+
+    var markers = [];
+    /*var baseLayer = L.tileLayer('http://api.tiles.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFzb25kYWx0b24iLCJhIjoiMnNBSWg4VSJ9.NMibCJgR_WkdcmfsD3ceGg', {
+        attribution: 'Azimuth1',
+        maxZoom: 22
+    });*/
+
+
+    //var ggl = new L.Google('HYBRID');
     //var ggl2 = new L.Google('TERRAIN');
-    map.addLayer(ggl);
+    //map.addLayer(ggl);
     //map.addControl(new L.Control.Layers( { 'Google':ggl, 'Google Terrain':ggl2}, {}));
 
 
     /*
         var routerControl = L.Routing.control({
             fitSelectedRoutes: false,
-       	});
+        });
         routerControl.addTo(map);
     */
+
+
+    //var myGridLayer = L.mapbox.tileLayer('mappiskyle.nh2c6h4o').addTo(map);
+    //var myGridLayer = L.mapbox.gridLayer('mappiskyle.nh2c6h4o').addTo(map);
+    //var myGridControl = L.mapbox.gridControl(myGridLayer).addTo(map);
+    //map.legendControl.addLegend(document.getElementById('legend').innerHTML);
+
+
+
+    var layerControl = L.control.layers({}, {
+        'Flow Distribution': L.mapbox.tileLayer('mappiskyle.nh2a4c2k'),
+        //'Bike Lanes': L.mapbox.tileLayer('examples.bike-lanes')
+    }, {
+        position: 'topright',
+        collapsed: false
+    });
+    layerControl.addTo(map);
+    var myGridLayer = L.mapbox.gridLayer('mappiskyle.nh2a4c2k'); //.addTo(map);
+    var myGridControl = L.mapbox.gridControl(myGridLayer);
+    map.on('overlayadd', function(layer) {
+        myGridLayer.addTo(map);
+        myGridControl.addTo(map);
+        //$('.map-legend').show();
+        map.legendControl.addLegend(document.getElementById('legend').innerHTML);
+    });
+
+    map.on('overlayremove', function(layer) {
+        map.removeLayer(myGridLayer);
+        myGridControl.removeFrom(map);
+        map.legendControl.removeLegend(document.getElementById('legend').innerHTML);
+        //$('.map-legend').hide();
+    });
+
 
     var watersources;
     //baseLayer.addTo(map);
@@ -517,6 +580,8 @@
             fire.setLatLng([parseFloat(pt.geometry.location.lat), parseFloat(pt.geometry.location.lng)]);
             map.removeLayer(water);
             map.removeLayer(routeLayer); // remove the old route
+
+
             getNearestWater(fire, compareRoutes, addr);
         });
     }
@@ -573,6 +638,13 @@
             opacity: 1
         })
         water.addTo(map);
+
+
+        //////Zoom to Bounds
+        var p1 = L.latLng(r.waypoints[1][0], r.waypoints[1][1]);
+        var p2 = L.latLng(r.waypoints[0][0], r.waypoints[0][1]);
+        map.panInsideBounds(L.latLngBounds(p1, p2))
+            //////
     };
 
 
@@ -749,12 +821,12 @@
             countyBounds = L.latLngBounds(coords.map(function(d) {
                 return L.latLng([d[1], d[0]]);
             }));
-            $('.topo').hide('slow',function() {
-               // return map.panTo(countyBounds.getCenter());
-               setTimeout(function(){
-               	map.fitBounds(countyBounds);
-               	//map.panTo(countyBounds.getCenter());
-               },500);
+            $('.topo').hide('slow', function() {
+                // return map.panTo(countyBounds.getCenter());
+                setTimeout(function() {
+                    map.fitBounds(countyBounds);
+                    //map.panTo(countyBounds.getCenter());
+                }, 500);
                 //return map.fitBounds(countyBounds);
             });
 
