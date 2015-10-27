@@ -627,7 +627,7 @@
         //console.log("Dist,"+Math.min.apply(Math, candidateDist)+);
         var r = candidateRoutes[candidateDist.indexOf(Math.min.apply(Math, candidateDist))];
         gpm = calcGPM(document.getElementById('numTankers').value, document.getElementById('tankerCapacity').value, (r.summary.totalTime / 60) * 2);
-        console.log("gpm," + gpm + "," + r.waypoints[0][0] + "," + r.waypoints[0][1]);
+        //console.log("gpm," + gpm + "," + r.waypoints[0][0] + "," + r.waypoints[0][1]);
         routeLayer = L.Routing.line(r).addTo(map);
         infoString = "<a href='http://fireroute.us'><img src='fireroute-logo.png' alt='FireRoute'></a><h4>Information about the nearest water source.</h4><p class='lead'>GPM: " + gpm + "</p><p>Round trip: " + Math.round(r.summary.totalTime / 60, 2) + " minutes.</p><p><ol><li>";
 
@@ -839,11 +839,12 @@
                 return L.latLng([d[1], d[0]]);
             }));
             $('.topo').hide('slow', function() {
+                $('.topo').remove();
                 // return map.panTo(countyBounds.getCenter());
                 setTimeout(function() {
                     map.fitBounds(countyBounds);
                     //map.panTo(countyBounds.getCenter());
-                }, 500);
+                }, 200);
                 //return map.fitBounds(countyBounds);
                 return true;
             });
