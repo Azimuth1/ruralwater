@@ -55,7 +55,7 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <form id="AddressForm" class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                    <input type="text" id="addressInput" class="form-control input-sm" placeholder="Addr: 123 Any Street">
+                    <input type="text" id="addressInput" class="form-control input-sm" value="14001 Harpers Ferry Rd, Purcellville, VA 20132">
                 </div>
                 <button type="submit" class="btn btn-default btn-sm btn-submit">Submit</button>
             </form>
@@ -387,18 +387,22 @@
     var gpm, roundTripTime;
 
 
-    var baseURL = 'https://api.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3lsZS1hemltdXRoMSIsImEiOiJiNjgwODliZmJmZGQyYjcyYjhhYzFkN2M4MTZjNjlkZSJ9.j4_XYU-hkLlAepVI6cRHew';
+    /*var baseURL = 'https://api.mapbox.com/v4/jasondalton.map-7z4qef6u/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3lsZS1hemltdXRoMSIsImEiOiJiNjgwODliZmJmZGQyYjcyYjhhYzFkN2M4MTZjNjlkZSJ9.j4_XYU-hkLlAepVI6cRHew';
     var baseLayer = L.tileLayer(baseURL, {
         attribution: 'Azimuth1',
-        maxZoom: 22
-    });
+        maxZoom: 22,
+        maxNativeZoom: 19
+    });*/
 
 
     var map = L.mapbox.map('map', 'jasondalton.map-7z4qef6u', {
-        attributionControl: false
+        attributionControl: false,
+        tileLayer: {
+            maxNativeZoom: 19 // The map will use zoom level 19 tiles for all zoom levels past 19
+        }
     });
     map.setView([37.63163475580643, -99.11865234374999], 5);
-    //map.setView([39.12, -77.695], 12);
+    //map.setView([39.12, -77.695], 18);
 
 
 
@@ -575,8 +579,19 @@
         //$.getJSON("http://nominatim.openstreetmap.org/search?q="+addr.split(' ').join('+')+"&format=json&viewbox=-77.968296,39.328613,-77.318729,38.841471", function( data ) {
         $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address=" + addr.split(' ').join('+') + "&bounds=-118.604794,34.172684|-118.500938,34.236144&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function(data) {
             //$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address="+addr.split(' ').join('+')+"&bounds=-77.968296,39.328613|-77.318729,38.841471&key=AIzaSyA6UX3-mKx_AXCMZCH4h9sGHai3mc9SNV8", function( data ) {
-            var pt = data.results[0];
-            //console.log(pt);
+            //console.log(data);
+            pt = data.results[0];
+            if (!pt) {
+                return;
+            }
+            /*var bounds = pt.geometry.viewport || {};
+            bounds = L.latLngBounds([bounds.northeast, bounds.southwest]);
+            if (bounds.isValid()) {
+                //map.fitBounds(bounds,function(){console.log('!!!')});
+            }*/
+
+
+
             fire.setLatLng([parseFloat(pt.geometry.location.lat), parseFloat(pt.geometry.location.lng)]);
             map.removeLayer(water);
             map.removeLayer(routeLayer); // remove the old route
@@ -722,7 +737,7 @@
                 return;
             }
 
-            d3.selectAll('.state').classed('hover', false);
+            g.selectAll('.state').classed('hover', false);
             d3.select(this).classed('hover', true);
 
             stateText.text(d.properties.NAME);
@@ -735,7 +750,7 @@
                 return;
             }
 
-            d3.selectAll('.county-boundary').classed('hover', false);
+            g.selectAll('.county-boundary').classed('hover', false);
             d3.select(this).classed('hover', true);
             var type = d.properties.LSAD;
             countyText.text(d.properties.NAME + ' ' + type);
@@ -743,8 +758,8 @@
 
         function clicked(d) {
             startBtn.classed('hide', true);
-            d3.selectAll('path').classed('hover', false);
-            d3.selectAll('path').classed('active2', false);
+            g.selectAll('path').classed('hover', false);
+            g.selectAll('path').classed('active2', false);
             countyText.text('');
             activeCounty = false;
             var x, y, k;
@@ -782,7 +797,7 @@
             if (!activeState) {
                 return;
             }
-            d3.selectAll('.county-boundary').classed('hover', false);
+            g.selectAll('.county-boundary').classed('hover', false);
 
             activeCounty = d.properties.NAME;
             var x, y, k;
@@ -830,6 +845,7 @@
                     //map.panTo(countyBounds.getCenter());
                 }, 500);
                 //return map.fitBounds(countyBounds);
+                return true;
             });
 
 
@@ -862,8 +878,10 @@
 
 
     };
-
+    //map.on('ready',function(){
     USTopo('#splash');
+    //})
+
     //$('.topo').hide('slow');
     </script>
 </body>
