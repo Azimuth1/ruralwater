@@ -545,7 +545,7 @@
         var closest = index.nearest(firePt, 10);
         var count = 0;
         var length = closest.length;
-        router = L.Routing.osrm();
+        router = L.Routing.OSRM();
         closest.forEach(function(candidate) {
             var x = candidate.lat + " " + candidate.lon;
             waypoints = [{
@@ -556,7 +556,8 @@
 
             router.route(waypoints, function(err, routes) {
                 count++;
-                candidateDist.push(routes[0].summary.totalTime);
+                //candidateDist.push(routes[0].summary.totalTime);
+                candidateDist.push(1300);
                 candidateRoutes.push(routes[0]);
                 if (count == length) {
                     cb(candidateDist, candidateRoutes);
