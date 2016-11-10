@@ -102,7 +102,8 @@ window.onload = function() {
         var closest = index.nearest(firePt, 10);
         var count = 0;
         var length = closest.length;
-        router = L.Routing.osrm();
+        router = L.Routing.OSRM();
+        console.log(router)
         closest.forEach(function(candidate) {
             var x = candidate.lat + " " + candidate.lon;
             waypoints = [{
